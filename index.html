@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tree Shop</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <a href="#" class="logo"> Tree Shop</a>
+         
+    </nav>
+    <header>
+       
+    </header>
+
+    <div class="container">
+        <div class="form-container">
+            <img src="./images/chau-lan-ho-diep-qua-tang-mung-xuan.jpg" alt="Tree Image">
+            <div id="addTreeBtn" class="form">
+                <h3>Tree Name</h3>
+                <input type="text" id="treeName" placeholder="Enter tree name" required>
+                <h3>Description</h3>
+                <textarea id="description" rows="5" placeholder="Enter description" required></textarea>
+                <h3>Image</h3>
+                <input type="file" id="image" required>
+                <button type="submit" class="add">Add</button>
+                <button type="reset" class="reset">Reset</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <p>Số 8, Tôn Thất Thuyết, Cầu Giấy, Hà Nội</p>
+    </footer>
+    <script>
+        let editingTreeId = null; // Biến để lưu ID của cây đang được sửa
+    
+        document.querySelector('.add').addEventListener('click', async (event) => {
+            event.preventDefault(); // Ngăn chặn gửi form mặc định
+            const name = document.getElementById('treeName').value;
+            const description = document.getElementById('description').value;
+            const imageFile = document.getElementById('image').files[0];
+    
+            // Kiểm tra nếu thiếu thông tin
+            if (!name || !description || (!imageFile && !editingTreeId)) {
+                alert('Please fill in all fields!');
+                return;
+            }
+    
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('description', description);
+            if (imageFile) formData.append('image', imageFile); // Chỉ gửi ảnh nếu có thay đổi
+    
+            try {
+                let response;
+                if (editingTreeId) {
+                    // Nếu đang sửa cây
+                    response = await fetch(`http://localhost:5000/api/trees/${editingTreeId}`, {
+                        method: 'PUT',
+                        body: formData,
+                    });
+                } else {
+                    // Nếu thêm cây mới
+                    response = await fetch('http://localhost:5000/api/trees', {
+                        method: 'POST',
+                        body: formData,
+                    });
+                }
+    
+                if (response.ok) {
+                    alert(editingTreeId ? 'Tree updated successfully' : 'Tree added successfully');
+                    fetchTrees(); // Làm mới danh sách cây
+                    resetForm(); // Reset form
+                } else {
+                    alert('Failed to add/update tree');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    
+        // Function to fetch trees and display them in the table
+        async function fetchTrees() {
+            try {
+                const response = await fetch('http://localhost:5000/api/trees');
+                const trees = await response.json();
+                const tableBody = document.querySelector('tbody');
+                tableBody.innerHTML = '';
+    
+                trees.forEach((tree, index) => {
+                    const row = `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${tree.name}</td>
+                            <td><img src="${tree.image}" alt="${tree.name}" width="50"></td>
+                            <td>${tree.description}</td>
+                            <td>
+                                <button onclick="editTree('${tree._id}')">✏️ Edit</button>
+                                <button onclick="deleteTree('${tree._id}')">🗑️ Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                    tableBody.insertAdjacentHTML('beforeend', row);
+                });
+            } catch (error) {
+                console.error('Error fetching trees:', error);
+            }
+        }
+    
+        // Function to reset the form
+        function resetForm() {
+            document.getElementById('treeName').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('image').value = '';
+            editingTreeId = null;
+            document.querySelector('.add').textContent = 'Add'; // Đổi nút về "Add"
+        }
+    
+       // Function to edit a tree
+async function editTree(id) {
+    const response = await fetch(`http://localhost:5000/api/trees/${id}`);
+    const tree = await response.json();
+
+    // Điền dữ liệu của cây vào form
+    document.getElementById('treeName').value = tree.name;
+    document.getElementById('description').value = tree.description;
+    
+    // Lưu ID cây đang sửa
+    editingTreeId = id;
+    document.querySelector('.add').textContent = 'Update'; // Đổi nút thành "Update"
+}
+
+    
+        // Function to delete a tree
+        async function deleteTree(id) {
+            if (confirm('Are you sure you want to delete this tree?')) {
+                const response = await fetch(`http://localhost:5000/api/trees/${id}`, {
+                    method: 'DELETE',
+                });
+    
+                if (response.ok) {
+                    alert('Tree deleted successfully');
+                    fetchTrees();
+                } else {
+                    alert('Failed to delete tree');
+                }
+            }
+        }
+    
+        // Fetch trees when page loads
+        window.onload = fetchTrees;
+    </script>
+    
+    
+</body>
+</html>

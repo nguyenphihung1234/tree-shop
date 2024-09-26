@@ -1,0 +1,146 @@
+body {
+    font-family: 'Ubuntu', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+header {
+    background-color: #a8b59b;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+}
+
+
+
+nav a.logo{
+    font-size: 33px;
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  
+nav {
+    text-align: left;
+    padding: 10px 20px;
+    background-color: #a8b59b;
+}
+
+nav a {
+    color: #a8b59b;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 20px;
+}
+
+.container {
+    width: 90%;
+    margin: 20px auto;
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container img {
+    width: 300px;
+    height: 400px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.form {
+    width: 80%;
+}
+
+.form input, .form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.form button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.form button{
+    background-color: #5cb85c;
+    color: white;
+}
+
+.form button.reset {
+    background-color: #d9534f;
+    color: white;
+}
+
+.form h3 {
+    color: #5d7262;
+    margin-bottom: 10px;
+}
+
+.table-container {
+    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+table th, table td {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #a8b59b;
+    color: white;
+}
+
+table td img {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.actions {
+    text-align: center;
+}
+
+.actions i {
+    cursor: pointer;
+    padding: 10px;
+    color: #5d7262;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #e6e6e6;
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 20px;
+}
+
+footer p {
+    margin: 0;
+}
